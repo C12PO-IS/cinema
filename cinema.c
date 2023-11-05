@@ -70,12 +70,14 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Usage : %s nombre_caisse %s nom_filme %s nombre_place \n", argv[0], argv[1], argv[2], argv[3]);
         return(3);
     }
- 
+     
     nombre_caisse = atoi(argv[1]);
     nom_filme = argv[2];
 
     nombre_places_cinema_str = argv[3];
     nombre_places_cinema = atoi(nombre_places_cinema_str);
+
+    printf("Le filme %s est sorti ! Il y a %d caisse et %d place diponible\n", nom_filme, nombre_caisse, nombre_places_cinema);
 
     //nombre_places_parking_str=argv[1];
     //nombre_places_parking=atoi(nombre_places_parking_str);
