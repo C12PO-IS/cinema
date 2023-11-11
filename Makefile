@@ -5,7 +5,7 @@ LINKOBJ  = $(OBJ)
 BIN  = cinema caisse
 CFLAGS = -g #-Wall
 
-all: cinema caisse wash
+all: cinema caisse wash ipc
 
 cinema: $(LINKOBJ) include/shm_const.h src/cinema.c
 	$(CC) src/cinema.c $(LINKOBJ) -o cinema $(CFLAGS)
@@ -18,6 +18,9 @@ shm_op.o: src/shm_op.c include/shm_const.h
 
 sem_op.o: src/sem_op.c include/shm_const.h
 	$(CC) -c src/sem_op.c $(CFLAGS)
+
+ipc:
+	./clean_ipc.sh
 
 aleatoire.o: src/aleatoire.c
 	$(CC) -c src/aleatoire.c $(CFLAGS)

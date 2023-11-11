@@ -91,8 +91,7 @@ printf("DEBUg : parking : shmid=%d\n", shmid);
     /* Attachement du segment de mémoire partagée */
     mem=attacher_segment_memoire(mem, &shmid);
 
-    /* Pas besoin de sémaphore on est seul :-) */
-
+    printf("%d", nombre_places_cinema);
     *mem=nombre_places_cinema;
 
     /* Conversion des shmid et semid  (int) en chaine pour appel programme externe */
@@ -103,12 +102,12 @@ printf("DEBUg : parking : shmid=%d\n", shmid);
 
     for(i=0;i<nombre_caisse;i++){
       pid = fork();
-      if (pid == -1){  /* Probleme a la creation du fils*/
+      if(pid == -1){  /* Probleme a la creation du fils*/
            perror("pb fork sur création entrée"); 
            //fin();
         break;
       }
-      if (pid==0){
+      if(pid==0){
         tab_caisse[i] = pid;
         printf("Cinema - Creation de la caisse numero %d avec pid = %d\n",i+1,getpid());
         sprintf(param, "%d", i + 1);
@@ -130,5 +129,10 @@ printf("DEBUg : parking : shmid=%d\n", shmid);
         }
      }
       printf("Cinema -  Tous les caisses sont férmé !\n");
+      /*on Tue les ipc
+    semctl(semap,i,IPC_RMID,NULL);
+    shmdt(terminaux);
+    shmctl(segMemT,IPC_RMID,NULL);*/
+    
      exit(0);
 }
