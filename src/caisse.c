@@ -36,7 +36,12 @@ int main(int argc, char *argv[])
 
     srand(time(NULL)^ (getpid()<<16));
     pid = getpid();
-    printf("\t(Fils %d), La caisse numero %d, viens d'ouvrir !\n",pid, numero_caisse);
+    
+    #ifdef DEBUG
+    printf("\t(fils %d), La caisse numero %d, viens d'ouvrir !\n",pid, numero_caisse);
+    #endif
+    printf("La caisse numero %d, viens d'ouvrir !\n", numero_caisse);
+    
     //recuperation semaphore
     sem = semget(CLE_SEM, 1, 0);
     if(sem == -1){
@@ -69,25 +74,41 @@ int main(int argc, char *argv[])
         else{
              if (*mem - nbr_famille >=0)
             {
+		#ifdef DEBUG
                 printf("\t (fils %d)Le(s) client(s) a pris %d place a la caisse numero %d\n",pid,nbr_famille,numero_caisse );
+		#endif
+
                 *mem=(*mem - nbr_famille);
-                
-        printf("memoire %d\n",*mem);
+		
+		#ifdef DEBUG
+        	printf("memoire %d\n",*mem);
+		#endif
+
             }else{
+
+		#ifdef DEBUG
                 printf("\t (fils %d)Le(s) client(s) sont trop nombreuse(s) %d a la caisse numero  %d\n",pid,nbr_famille,numero_caisse );
+		#endif
             };
         }
 
         /* On protège l'accès à la shm */
         V(sem);
         if(close){
+	    #ifdef DEBUG
             printf("\t (fils %d)la caisse numero %d se ferme! \n",pid,numero_caisse);
-            break;
+	    #endif
+	    break;
         }
     }
     int time = rand() % 8;
     sleep(time);
-    printf("\t (fils %d) (temps = %d)La caisse numero %d est fermé !\n",pid,time,numero_caisse);
+  
+    #ifdef DEBUG
+    printf("\t (fils %d) (temps = %d)", pid,time);
+    #endif
+
+    printf("La caisse numero %d est fermé !\n",numero_caisse);
 
     exit(0);
 

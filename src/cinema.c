@@ -97,26 +97,47 @@ printf("DEBUg : parking : shmid=%d\n", shmid);
     /* Conversion des shmid et semid  (int) en chaine pour appel programme externe */
     //sprintf(shmid_str, "%d", shmid);
     //sprintf(semid_str, "%d", semid);
+   
+    /* Création de l'afficheur */
+    pid_afficheur = fork();
+    if(pid_afficheur == -1){
+	perror("pb fork sur création entrée afficheur");
+    }
+    if(pid_afficheur==0){
+	#ifdef DEBUG
+	printf("cinema - Creation de l'afficheur %d avec pid = %d\n",i+1,pid_afficheur);
+	#endif
+	sprintf(param, "%s", argv[2]);
+	execl("./afficheur","afficheur", param,NULL);
+    }
+
+    // Pour lencer afficheur executer
+    sleep(1);
 
     /* création des fils*/
 
     for(i=0;i<nombre_caisse;i++){
       pid = fork();
       if(pid == -1){  /* Probleme a la creation du fils*/
-           perror("pb fork sur création entrée"); 
+           perror("pb fork sur création entrée caisse"); 
            //fin();
         break;
       }
       if(pid==0){
         tab_caisse[i] = pid;
-        printf("Cinema - Creation de la caisse numero %d avec pid = %d\n",i+1,getpid());
-        sprintf(param, "%d", i + 1);
+        #ifdef DEBUG
+        printf("Cinema - Creation de la caisse %d avec pid = %d\n",i+1,getpid());
+        #endif
+	sprintf(param, "%d", i + 1);
         execl("./caisse","caisse", param,NULL);
       }
     }
+
     /* processus père */
     sleep(1);
+    #ifdef DEBUG
     printf("Père, on attend 5s \n");
+    #endif
     sleep(5);
     //fin_fils(nombre_caisse,tab_caisse,SIGINT);
      while(1){
@@ -125,7 +146,7 @@ printf("DEBUg : parking : shmid=%d\n", shmid);
           break;
         }
         if(WIFEXITED(code_retour_fin_fils)!= 0){
-          printf("La caisse avec le pid %d est mort\n",pid);
+          //printf("La caisse avec le pid %d est mort\n",pid);
         }
      }
       printf("Cinema -  Tous les caisses sont férmé !\n");

@@ -2,16 +2,19 @@
 
 OBJ  = sem_op.o shm_op.o aleatoire.o
 LINKOBJ  = $(OBJ)
-BIN  = cinema caisse
+BIN  = cinema caisse afficheur
 CFLAGS = -g #-Wall
 
-all: cinema caisse wash
+all: cinema caisse afficheur wash
 
 cinema: $(LINKOBJ) include/shm_const.h src/cinema.c
 	$(CC) src/cinema.c $(LINKOBJ) -o cinema $(CFLAGS)
 
 caisse: $(LINKOBJ) include/shm_const.h src/caisse.c
 	$(CC) src/caisse.c $(LINKOBJ) -o caisse $(CFLAGS)
+
+afficheur: $(LINKOBJ) include/shm_const.h src/afficheur.c
+	$(CC) src/afficheur.c $(LINKOBJ) -o afficheur $(CFLAGS)
 
 shm_op.o: src/shm_op.c include/shm_const.h
 	$(CC) -c src/shm_op.c $(CFLAGS)
