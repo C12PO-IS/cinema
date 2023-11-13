@@ -17,7 +17,6 @@ extern int * attacher_segment_memoire();
 
 int main (int argc, char *argv[])
 {
-    int segMem;
     pid_t pid;  
     int * mem; /* Adresse du segment de mémoire partagée */
     int shmid;
@@ -49,7 +48,7 @@ int main (int argc, char *argv[])
 	}
 		
 	if( *mem <= 1){
-		printf("Il y a plus de place pour le filme !!");
+		printf("Il y a plus de place pour le filme !!\n");
 	}
 	sleep(5);
     }

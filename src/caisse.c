@@ -22,10 +22,8 @@ extern int V();
 
 int main(int argc, char *argv[])
 {
-    int segMem;
     pid_t pid;  
-     int * mem; /* Adresse du segment de mémoire partagée */
-    int i;
+    int * mem; /* Adresse du segment de mémoire partagée */
     int shmid;
     int sem;
     int numero_caisse = atoi(argv[1]);

@@ -16,14 +16,6 @@ extern int V();
 
 extern int creer_segment_memoire();
 
-
-void fin_fils(int n, Tableau_Fils les_fils, int Signal){
-  /* Envoi aux n fils dont le pid est dans le tableau les_fils le signal Signal */
-  int i;
-  for(i=0;i<n;i++)
-    kill(les_fils[i],Signal);
-}
-
 void usage(char *nom){
   fprintf(stderr, "Usage : cinema <Nombre de caisses> <Titre d’un film> <Nombre de places pour ce film>\n");
 }
@@ -41,21 +33,15 @@ int main(int argc, char *argv[])
      
     int nombre_caisse;
     char * nom_film;
-    int nombre_place;
 
     int shmid; /* Id du segment de mémoire partagé */
     int semid; /* Id du sémaphore */
-
-    char shmid_str[20]; /* Pour conversion du shmid (int) en chaine */
-    char semid_str[20]; /* Pour conversion du semid (int) en chaine */
 
     int * mem; /* Adresse du segment de mémoire partagée */
 
     pid_t pid;
     pid_t pid_afficheur;
     Tableau_Fils tab_caisse;
-
-    char param_gnome_terminal[80];
 
     if ( argc != 4 ) {
         usage(argv[0]);
@@ -107,8 +93,7 @@ printf("DEBUg : parking : shmid=%d\n", shmid);
 	#ifdef DEBUG
 	printf("cinema - Creation de l'afficheur %d avec pid = %d\n",i+1,pid_afficheur);
 	#endif
-	sprintf(param, "%s", argv[2]);
-	execl("./afficheur","afficheur", param,NULL);
+	execl("./afficheur","afficheur", nom_film,NULL);
     }
 
     // Pour lencer afficheur executer
@@ -138,22 +123,19 @@ printf("DEBUg : parking : shmid=%d\n", shmid);
     #ifdef DEBUG
     printf("Père, on attend 5s \n");
     #endif
-    sleep(5);
-    //fin_fils(nombre_caisse,tab_caisse,SIGINT);
      while(1){
       pid = waitpid(-1, &code_retour_fin_fils, WUNTRACED | WCONTINUED);
       if(pid == -1){
           break;
         }
         if(WIFEXITED(code_retour_fin_fils)!= 0){
-          //printf("La caisse avec le pid %d est mort\n",pid);
+          #ifdef DEBUG
+          printf("La caisse avec le pid %d est mort\n",pid);
+          #endif
         }
      }
       printf("Cinema -  Tous les caisses sont férmé !\n");
-      /*on Tue les ipc
-    semctl(semap,i,IPC_RMID,NULL);
-    shmdt(terminaux);
-    shmctl(segMemT,IPC_RMID,NULL);*/
-    
-     exit(0);
+      /*on Tue les ipc*/
+    system("./clean_ipc.sh");
+     exit(1);
 }
