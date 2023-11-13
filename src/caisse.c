@@ -72,10 +72,7 @@ int main(int argc, char *argv[])
         else{
              if (*mem - nbr_famille >=0)
             {
-		#ifdef DEBUG
-                printf("\t (fils %d)Le(s) client(s) a pris %d place a la caisse numero %d\n",pid,nbr_famille,numero_caisse );
-		#endif
-
+                printf("\t Le(s) client(s) a pris %d billet(s) a la caisse numero %d\n",nbr_famille,numero_caisse );
                 *mem=(*mem - nbr_famille);
 		
 		#ifdef DEBUG
@@ -83,10 +80,7 @@ int main(int argc, char *argv[])
 		#endif
 
             }else{
-
-		#ifdef DEBUG
-                printf("\t (fils %d)Le(s) client(s) sont trop nombreuse(s) %d a la caisse numero  %d\n",pid,nbr_famille,numero_caisse );
-		#endif
+                printf("\t Il ne reste pas assez de place pour acheter %d a la caisse numero  %d\n",nbr_famille,numero_caisse );
             };
         }
 
@@ -99,8 +93,6 @@ int main(int argc, char *argv[])
 	    break;
         }
     }
-    int time = rand() % 8;
-    sleep(time);
   
     #ifdef DEBUG
     printf("\t (fils %d) (temps = %d)", pid,time);

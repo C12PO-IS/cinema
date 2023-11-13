@@ -37,18 +37,18 @@ int main (int argc, char *argv[])
     printf("\t(afficheur %d \n",pid);
     #endif
 
-    printf("\t Le filme à commancer, Il y a %d place d'ouver pour le filme %s !\n", *mem, argv[1]);
+    printf("\t (Afficheur) Il y a %d billet(s) pour le film %s !\n", *mem, argv[1]);
     
     sleep(3);
     /*afficheur*/
     while(1){
 	
 	if( *mem > 0){
-		printf("Il reste %d place pour le filme %s\n", *mem, argv[1]);
+		printf("Il reste %d place(s) pour le film %s\n", *mem, argv[1]);
 	}
 		
 	if( *mem <= 1){
-		printf("Il y a plus de place pour le filme !!\n");
+		printf("Tout les billets ont été vendu !!\n");
 	}
 	sleep(5);
     }

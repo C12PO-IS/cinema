@@ -67,22 +67,12 @@ int main(int argc, char *argv[])
 
     /* Création segment de mémoire partagé */
     creer_segment_memoire(CLE_SHM, &shmid);
-
-  
-
-/*
-printf("DEBUg : parking : shmid=%d\n", shmid);
-*/
     
     /* Attachement du segment de mémoire partagée */
     mem=attacher_segment_memoire(mem, &shmid);
 
     printf("%d", nombre_places_cinema);
     *mem=nombre_places_cinema;
-
-    /* Conversion des shmid et semid  (int) en chaine pour appel programme externe */
-    //sprintf(shmid_str, "%d", shmid);
-    //sprintf(semid_str, "%d", semid);
    
     /* Création de l'afficheur */
     pid_afficheur = fork();
